@@ -6,7 +6,7 @@ import sys
 
 
 # "/Users/chunkauwong/Desktop/WTH/1.jpg"
-def Response(image):
+def Response(image='/Users/chunkauwong/Desktop/WTH/1.jpg'):
     reload(sys)
     sys.setdefaultencoding('utf8')
     api_url ='https://westus.api.cognitive.microsoft.com/emotion/v1.0/recognize'
@@ -26,7 +26,7 @@ def Response(image):
         response = ast.literal_eval(r.text)
         score = response[0]['scores']
         emotion = sorted(score,key=score.get)[-1]
-        #print emotion
+        print emotion
         return emotion
     except Exception as e:
         #print "Exception"
