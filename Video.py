@@ -44,18 +44,14 @@ def Track_face(emotion=""):
         # Draw a rectangle around the faces
         for (x, y, w, h) in faces:
             face = frame[y-4:y+h+4,x-4:x+w+4]
-            r = cv2.imencode('.jpg',face)[1].tobytes()
-            cv2.imwrite("1.jpg",face)
+            #cv2.imwrite("1.jpg",face)
             #with open(cwd +"/1.jpg",'rb') as f:
-            #    image = f.read()
-            #print r == image
-            #print type(r)
-            #print type(image)
             cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
-            emotion = Emotion(r)
+            emotion = Emotion(cv2.imencode('.jpg',face)[1].tobytes())
             #emotion = Response(r)
             cv2.putText(frame,emotion,(x+6,y+6),cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,0),2)
         # Display the resulting frame
+            print emotion
         cv2.imshow('Video', frame)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
