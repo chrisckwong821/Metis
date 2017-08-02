@@ -68,8 +68,11 @@ def realtime():
             emotion = checkMapping(x,y,w,h)
             if emotion != "NULL":
                 if emotion == "happiness" and alreadysent == False:
-                    urllib2.urlopen("http://localhost:3978/api/listener?customerid=123112")
-                    alreadysent = True
+                    try:
+                        sendcustomer = urllib2.urlopen("http://localhost:3978/api/listener?customerid=123112")
+                        alreadysent = True
+                    except Exception as e:
+                        print "error"
 
                 textX = x + int(round(1.05*w))
                 textY = y + int(round(0.1*h))

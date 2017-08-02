@@ -1,0 +1,13 @@
+{
+  "name": "contoso-outfitters",
+  "version": "0.0.0",
+  "description": "ContosoOutfitters",
+  "main": "app.js",
+  "author": {
+    "name": "a-waali"
+  },
+  "dependencies": {
+    "botbuilder": "^3.9.0",
+    "restify": "^5.0.1"
+  }
+}
