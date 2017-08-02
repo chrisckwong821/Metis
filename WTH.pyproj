@@ -24,27 +24,35 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include="1.jpg" />
+    <Content Include="howmanypeoplearearound\Dockerfile" />
+    <Content Include="howmanypeoplearearound\howmanypeoplearearound\MAIN.pyc" />
+    <Content Include="howmanypeoplearearound\LICENSE" />
+    <Content Include="howmanypeoplearearound\README.md" />
     <Content Include="Models\haarcascade_frontalface_alt.xml" />
     <Content Include="Models\haarcascade_frontalface_alt2.xml" />
     <Content Include="Models\haarcascade_frontalface_alt_tree.xml" />
     <Content Include="Models\haarcascade_frontalface_default.xml" />
-    <Content Include="NewFolder1\Models\haarcascade_frontalface_alt2.xml" />
-    <Content Include="NewFolder1\Models\haarcascade_frontalface_alt_tree.xml" />
-    <Content Include="NewFolder1\Models\haarcascade_frontalface_default.xml" />
     <Content Include="requirements.txt" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="howmanypeoplearearound\howmanypeoplearearound\analysis.py" />
+    <Compile Include="howmanypeoplearearound\howmanypeoplearearound\MAIN.py" />
+    <Compile Include="howmanypeoplearearound\howmanypeoplearearound\oui.py" />
+    <Compile Include="howmanypeoplearearound\howmanypeoplearearound\plotlyjs.py" />
+    <Compile Include="howmanypeoplearearound\howmanypeoplearearound\powerbi.py" />
+    <Compile Include="howmanypeoplearearound\setup.py" />
     <Compile Include="Later\data_import.py" />
     <Compile Include="Later\Oxford.py" />
     <Compile Include="metis.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="metis_powerbi.py" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="howmanypeoplearearound\" />
+    <Folder Include="howmanypeoplearearound\howmanypeoplearearound\" />
     <Folder Include="Later" />
     <Folder Include="Models\" />
-    <Folder Include="NewFolder1\" />
-    <Folder Include="NewFolder1\Models\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
 </Project>
