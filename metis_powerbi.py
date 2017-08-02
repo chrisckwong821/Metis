@@ -12,9 +12,10 @@ from datetime import datetime
 import urllib2, time
 #video_capture = cv2.VideoCapture(1)
 
-def powerBI(emotion,age,gender):
-    REST_API_url = "https://api.powerbi.com/beta/84c31ca0-ac3b-4eae-ad11-519d80233e6f/datasets/c0e494fd-8d01-4207-86ef-02e8cf0bd687/rows?key=HDzwBd6u5npz5W5AcyBmf448Agk0Y7JokId%2Bu9oaFaq88cueJQCM9RPsVuWVrfqbxhyMHk72FIcHZdkHsasEBg%3D%3D"
+def powerBI(emotion,age,gender):#,anger,comtempt,disgust,fear,happiness,surprise,neutral,sadness):
+    REST_API_url = "https://api.powerbi.com/beta/84c31ca0-ac3b-4eae-ad11-519d80233e6f/datasets/5c0abbce-e8ac-4114-b4f2-18e01e5b0aea/rows?key=iUn4OscyhdGQfZEg9LO%2BofsRj2eqLwOuPRuVdNYG2WqUl9HyLN%2FJJceZxXaHmh0GzoqYyklPS4L1Jcotl7zkjw%3D%3D"
     now = datetime.strftime(datetime.now(), "%Y-%m-%dT%H:%M:%S%Z")
+    #data = '[{{"Time":"{0}","Emotion":"{1}","Age":"{2}","Gender":"{3}"#,"anger":"{4},"comtempt":"{5}","disgust":"{6}","fear":"{7}","happiness":"{8}","surprise":"{9}","neutral":"{10}","sadness":"{11}"}}]'.format(now,emotion,age,gender,anger,comtempt,disgust,fear,happiness,surprise,neutral,sadness)
     data = '[{{"Time":"{0}","Emotion":"{1}","Age":"{2}","Gender":"{3}"}}]'.format(now,emotion,age,gender)
     req = urllib2.Request(REST_API_url,data)
     response = urllib2.urlopen(req)
@@ -57,7 +58,15 @@ def face_analyse():
                 emotion = sorted(face["faceAttributes"]["emotion"],key=face["faceAttributes"]["emotion"].get)[-1]
                 age = face["faceAttributes"]["age"]
                 gender = ((face["faceAttributes"]["gender"]=="male")*1)
-                powerBI(emotion,age,gender)
+                #anger = face["faceAttributes"]["emotion"]["anger"]
+                #comtempt = face["faceAttributes"]["emotion"]["anger"]
+                #disgust = face["faceAttributes"]["emotion"]["anger"]
+                #fear = face["faceAttributes"]["emotion"]["anger"]
+                #happiness = face["faceAttributes"]["emotion"]["anger"]
+                #surprise = face["faceAttributes"]["emotion"]["anger"]
+                #neutral = face["faceAttributes"]["emotion"]["anger"]
+                #sadness = face["faceAttributes"]["emotion"]["anger"]
+                powerBI(emotion,age,gender)#,anger,comtempt,disgust,fear,happiness,surprise,neutral,sadness)
                 faceData.append([face["faceRectangle"]["left"],face["faceRectangle"]["top"],emotion,age,gender])
             
 def getFrame():
