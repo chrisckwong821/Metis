@@ -1,2 +1,0 @@
-C:\Users\a-waali\Desktop\Microsoft\Dev\WTH\Chatbot\obj\Debug\Chatbot.njsprojResolveAssemblyReference.cache
-C:\Users\a-waali\Desktop\Microsoft\Dev\WTH\Chatbot\bin\Microsoft.NodejsTools.WebRole.dll
