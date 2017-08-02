@@ -1,0 +1,6 @@
+*.pyc
+*.DS_store
+obj
+Chatbot/bin
+Chatbot/node_modules
+Chatbot/obj

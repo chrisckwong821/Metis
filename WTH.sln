@@ -7,6 +7,11 @@ Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "WTH", "WTH.pyproj", "{F6A35
 EndProject
 Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "Chatbot", "Chatbot\Chatbot.njsproj", "{A797154A-9B79-49F1-B8A1-CE0D52FE8F12}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F05C1A89-5853-4BAB-8D81-A40F9FE7325D}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
