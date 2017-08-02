@@ -5,13 +5,17 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{f6a35bab-35a1-4131-b9f4-e96e5d7611a6}</ProjectGuid>
     <ProjectHome />
-    <StartupFile>Video.py</StartupFile>
+    <StartupFile>metis.py</StartupFile>
     <SearchPath />
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
     <ProjectTypeGuids>{888888a0-9f3d-457c-b088-3a5042f75d52}</ProjectTypeGuids>
     <LaunchProvider>Standard Python launcher</LaunchProvider>
     <InterpreterId />
+    <IsWindowsApplication>False</IsWindowsApplication>
+    <CommandLineArguments>
+    </CommandLineArguments>
+    <EnableNativeCodeDebugging>False</EnableNativeCodeDebugging>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
   <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
@@ -20,16 +24,27 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include="1.jpg" />
+    <Content Include="Models\haarcascade_frontalface_alt.xml" />
+    <Content Include="Models\haarcascade_frontalface_alt2.xml" />
+    <Content Include="Models\haarcascade_frontalface_alt_tree.xml" />
+    <Content Include="Models\haarcascade_frontalface_default.xml" />
+    <Content Include="NewFolder1\Models\haarcascade_frontalface_alt2.xml" />
+    <Content Include="NewFolder1\Models\haarcascade_frontalface_alt_tree.xml" />
+    <Content Include="NewFolder1\Models\haarcascade_frontalface_default.xml" />
     <Content Include="requirements.txt" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Later\data_import.py" />
     <Compile Include="Later\Oxford.py" />
-    <Compile Include="Video.py" />
-    <Compile Include="Video_Para.py" />
+    <Compile Include="metis.py">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Later" />
+    <Folder Include="Models\" />
+    <Folder Include="NewFolder1\" />
+    <Folder Include="NewFolder1\Models\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
 </Project>
