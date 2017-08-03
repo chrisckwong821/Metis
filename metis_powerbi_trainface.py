@@ -71,6 +71,8 @@ def faceapi_train(image):
 
     params = urllib.urlencode({
     # Request parameters
+    # groupid for waqas : 'waqas'
+    # personid : '998bc890-c82f-4f3c-a4d5-04c4447a102f'
     'personGroupId': 'chrisid',
     'personId':'9a6bd70b-deae-4e34-a14f-b7f2e65ab565',
 
@@ -115,23 +117,16 @@ def faceapi_findsimilar(faceid):
     
 def face_analyse():
      global faceData
-     control=0
+     control = 0
      #conn = http.HTTPSConnection("https://southeastasia.api.cognitive.microsoft.com")
      #conn.request("POST", "/face/v1.0/persongroups/chrisid/persons/9a6bd70b-deae-4e34-a14f-b7f2e65ab565/persistedFaces")
      while True:
         response = faceapi(cv2.imencode('.jpg', frame)[1].tobytes())
-        
-        
         #faceapi_train(cv2.imencode('.jpg', frame)[1].tobytes())
-        #print "faceuploaded to train"
         faceData = []
         if response != None:
             for face in response:
-                print face['faceId']
                 compare = faceapi_findsimilar(face['faceId'])
-                print type(compare)
-                #print compare
-                #print compare['isIdentical']
                 if compare['isIdentical'] == True and compare['confidence'] > 0.5 and control==0:
                     urllib2.urlopen("http://metischatbot.azurewebsites.net/api/listener?customerid=123112")
                     control+=1
