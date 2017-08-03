@@ -29,6 +29,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="app.js" />
+    <Compile Include="DbHandler.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="speech-service.js" />
+    <Content Include="ffmpeg.exe" />
     <Content Include="file.bin" />
     <Content Include="package.json" />
     <Content Include="README.md" />
