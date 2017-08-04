@@ -51,7 +51,6 @@ def getFrame():
 
 def realtime():
     faceCascade = cv2.CascadeClassifier("Models/haarcascade_frontalface_default.xml")
-    alreadysent = False
     while True:
         # Capture frame-by-frame
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -67,13 +66,6 @@ def realtime():
             cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
             emotion = checkMapping(x,y,w,h)
             if emotion != "NULL":
-                if emotion == "happiness" and alreadysent == False:
-                    try:
-                        sendcustomer = urllib2.urlopen("http://localhost:3978/api/listener?customerid=123112")
-                        alreadysent = True
-                    except Exception as e:
-                        print "error"
-
                 textX = x + int(round(1.05*w))
                 textY = y + int(round(0.1*h))
                 cv2.putText(frame,emotion,(textX,textY),cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,0),2)

@@ -11,6 +11,7 @@
     "botbuilder-azure": "^3.0.2",
     "fluent-ffmpeg": "^2.1.2",
     "needle": "^1.6.0",
+    "node-uuid": "^1.4.8",
     "restify": "^5.0.1"
   }
 }

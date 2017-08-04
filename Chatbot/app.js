@@ -10,7 +10,7 @@ var needle = require('needle'), //Speech-to-text
 
 // Setup Restify Server
 var server = restify.createServer();
-server.listen(/*|| process.env.port || process.env.PORT ||*/ 3978, function () {
+server.listen(process.env.port || process.env.PORT || 3978, function () {
     console.log('%s listening to %s', server.name, server.url);
 });
 
@@ -39,9 +39,7 @@ bot.recognizer(recognizer);
 // Bots Global Actions
 //=========================================================
 
-bot.endConversationAction('goodbye', 'Goodbye :)', { matches: /^goodbye/i });
 bot.beginDialogAction('help', '/help', { matches: /^help/i });
-bot.beginDialogAction('reset', '/reset', { matches: /^reset/i });
 
 //=========================================================
 // Listener
@@ -63,7 +61,19 @@ server.get('/api/listener', function (req, res, next) {
 
 // initiate a dialog proactively 
 function startProactiveDialog(address) {
-    bot.beginDialog(address, "*:/WelcomeExistingCustomer");
+    // new conversation address, copy without conversationId
+    var newConversationAddress = Object.assign({}, address);
+    delete newConversationAddress.conversation;
+    delete newConversationAddress.id;
+
+    bot.beginDialog(newConversationAddress, "*:/WelcomeExistingCustomer", null, function (err) {
+        if (err) {
+            // error ocurred while starting new conversation. Channel not supported?
+            bot.send(new builder.Message()
+                .text('This channel does not support this operation: ' + err.message)
+                .address(address));
+        }
+    });
 }
 
 //=========================================================
@@ -73,6 +83,7 @@ function startProactiveDialog(address) {
 bot.use({
     botbuilder: function (session, next) {
         if (hasAudioAttachment(session)) {
+            session.sendTyping();
             getAudioStreamFromMessage(session.message, function (stream) {
                 speechService.getTextFromAudioStream(stream)
                     .then(function (text) {
@@ -99,7 +110,7 @@ bot.on('conversationUpdate', function (message) {
     if (message.membersAdded) {
         message.membersAdded.forEach(function (identity) {
             if (identity.id === message.address.bot.id) {
-                bot.beginDialog(message.address, '/');
+                bot.beginDialog(message.address, '/Greeting');
             }
         });
     }
@@ -111,28 +122,116 @@ bot.on('conversationUpdate', function (message) {
 
 // Receive messages from the user and respond by echoing each message back (prefixed with 'You said:')
 bot.dialog('/', function (session) {
-    fs.writeFile("file.bin", JSON.stringify(session.message.address), 'binary', (err) => {
-        if (err) console.log(err)
-        else console.log('File saved')
-    })
-    session.endConversation("You said: %s", session.message.text);
+    session.sendTyping();
+    session.endConversation("Sorry, I cannot answer that. That is beyond my capablities for now.", session.message.text);
 });
 
 // handle the proactive initiated dialog
 bot.dialog('/WelcomeExistingCustomer', function (session, args, next) {
-        session.endDialog('Hello %s, Welcome to the store!',session.message.user.name);
+    session.sendTyping();
+    session.endConversation('Hi %s, Welcome to Contoso Outfitters! How can I be of help?',session.message.user.name);
 });
 
-bot.dialog('Specs', function (session, args) {
-    // retrieve hotel name from matched entities
-    var deviceEntity = builder.EntityRecognizer.findEntity(args.intent.entities, 'device');
-    if (deviceEntity) {
-        session.send('Looking for specifications of \'%s\'...', deviceEntity.entity);
-        session.endDialog('Dimensions: 11.5" x 7.9" x 0.33" (292 mm x 201 mm x 8.5 mm)\nDisplay	Screen: 12.3" PixelSense Display\nResolution: 2736 x 1824 (267 PPI)\nTouch: 10 point multi- touch\nMemory: 4GB, 8GB, or 16GB RAM\nProcessor: Intel Core 7th- generation m3, i5, or i7\nBattery Life: Up to 13.5 hours of video playback\nGraphics: Intel HD Graphics 615 (m3), Intel HD Graphics 620 (i5), Intel Iris Plus Graphics 640 (i7)');
-    }
-}).triggerAction({
-    matches: 'Specs'
+bot.dialog('/help', function (session) {
+    session.sendTyping();
+    session.endConversation('An assistant will come right over to help you :)');
 });
+
+bot.dialog('/Greeting', function (session, args) {
+    fs.writeFile("file.bin", JSON.stringify(session.message.address), 'binary', (err) => {
+        if (err) console.log(err)
+        else console.log('File saved')
+    })
+    session.sendTyping();
+    session.endConversation('Hey %s!', session.message.user.name);
+}).triggerAction({
+    matches: 'greeting'
+    });
+
+bot.dialog('/ThanksReply', function (session, args) {
+    session.sendTyping();
+    session.endConversation('My Pleasure! :)');
+}).triggerAction({
+    matches: 'thanks'
+});
+
+bot.dialog('/PurchaseHistory', function (session, args) {
+    var msg = new builder.Message(session);
+    msg.attachmentLayout(builder.AttachmentLayout.carousel)
+    session.sendTyping();
+    msg.attachments([
+        new builder.HeroCard(session)
+            .title("Silk-blend Polo Shirt")
+            .subtitle("Contoso Outfitters | Item Nr. 0443860009")
+            .text("Dark Blue | Size Large | Quantity: 02")
+            .images([builder.CardImage.create(session, 'http://lp2.hm.com/hmprod?set=source[/environment/2017/8VO_0205_009R.jpg],width[3462],height[4048],y[-1],type[FASHION_FRONT]&hmver=0&call=url[file:/product/main]')]),
+        new builder.HeroCard(session)
+            .title("COD Chinese Jacket")
+            .subtitle("Clothes of Desire | Piece 001 ")
+            .text("Indigo 11.50 | Natural Dye  | Size Medium | Quantity: 01")
+            .images([builder.CardImage.create(session, 'https://cdn.shopify.com/s/files/1/0738/6935/products/02-04_1024x1024.jpg?v=1452683765')]),
+        new builder.HeroCard(session)
+            .title("Grandad shirt Regular fit")
+            .subtitle("Azure Wears | Catalogue 41233112")
+            .text("Dark Blue | Size Large | Quantity: 01")
+            .images([builder.CardImage.create(session, 'http://lp2.hm.com/hmprod?set=source[/environment/2017/9BR_0424_048R.jpg],width[3946],height[4613],y[-1],type[FASHION_FRONT]&hmver=0&call=url[file:/product/main]')]),
+        new builder.HeroCard(session)
+            .title("Cotton Denim Jeans")
+            .subtitle("Emperia | Style 01117017001 ")
+            .text("Indigo | Size 34 | Quantity: 01")
+            .images([builder.CardImage.create(session, 'http://images.e-giordano.com/productphoto/01117017001/81_2_1_1_0800_1000.jpg')]),  
+    ]);
+    session.send(msg).endDialog();
+}).triggerAction({
+    matches: 'wardrobe'
+});
+
+bot.dialog('/Recommendation', [
+    function (session, args) {
+        session.sendTyping();
+        session.send("How about these?");
+        msg = new builder.Message(session)
+            .attachments([
+                new builder.ThumbnailCard(session)
+                    .title("Ace Embroidered Low-Top Sneaker")
+                    .subtitle("Sometimes you want a splash of color with your white sneakers. This pair gives you that extra visual element with the brand's signature green-and-red stripe.")
+                    .images([
+                        builder.CardImage.create(session, "https://image.ibb.co/fw1wGa/LP_996x250_sneakerfever_hken.jpg")
+                    ]).buttons([
+                        builder.CardAction.imBack(session, "why these?", "Why?"),
+                        builder.CardAction.imBack(session, "where can I find them?", "Where?")
+                    ])
+            ]);
+        builder.Prompts.choice(session, msg, ["why these?", "where can I find them?"]);
+    },
+    function (session, results) {
+        var msg;
+        var reply = results.response.entity;
+        switch (reply) {
+            case 'why these?':
+                msg = "Because:\r\n1. You seem to like a minimalistic design\r\n2. In accordance with your high reviews preference, these sneakers have an average rating of 4.23/5.00\r\n3. Your friend Chris bought the same and he reviewed them 5.0/5.0\r\n4. Your size is available in this store";
+                break;
+            case 'where can I find them?':
+                msg = "They are available on the 2nd floor. An assistant will find you soon to offer help :)";
+                break;
+        }
+        builder.Prompts.choice(session, msg, "thanks|where?", "button");
+    },
+    function (session, results) {
+        var msg;
+        var reply = results.response.entity;
+        switch (reply) {
+            case 'where?':
+                msg = "They are available on the 2nd floor. An assistant is on the way to help you :)";
+                break;
+            case 'thanks':
+                msg = "My pleasure :)";
+                break;
+        }
+        session.endDialog(msg);
+    }
+]).triggerAction({ matches: 'recommendation' });
+
 
 //=========================================================
 // Utilities
@@ -145,7 +244,6 @@ function hasAudioAttachment(session) {
                 session.message.attachments[0].contentType === 'application/octet-stream' || session.message.attachments[0].contentType === 'audio/x-m4a' || session.message.attachments[0].contentType === 'audio/aac' || session.message.attachments[0].contentType === 'audio/vnd.dlna.adts');
     }
 }
-
 
 function getAudioStreamFromMessage(message, cb) {
     var headers = {};
