@@ -1,4 +1,4 @@
-# WTH
+# ReadME
 
 
 The project is our team-effort for Microsoft Hackathon 2017. It aims to incorporate Bot Framework and Azure Face API. For development, we also incorporated opencv to detect faces using pre-trained haar-cascade features.
