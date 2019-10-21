@@ -8,4 +8,4 @@ olefile==0.44
 Pillow==4.2.1
 requests==2.18.1
 urllib==1.21.1
-urllib3==1.21.1
+urllib3==1.24.2
